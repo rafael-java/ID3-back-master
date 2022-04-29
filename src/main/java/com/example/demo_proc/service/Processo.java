@@ -5,12 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.stereotype.Service;
+
 import com.example.demo_proc.models.ListasPadrao;
-import com.example.demo_proc.models.ModelBasicoRequest;
-import com.example.demo_proc.models.ModelBasicoResponse;
+import com.example.demo_proc.models.ModelRequest;
+import com.example.demo_proc.models.ModelResponse;
 import com.example.demo_proc.models.NohOuRamo;
 
 @Service
@@ -32,8 +33,8 @@ public class Processo {
 				iteracaoAtual);
 	}
 
-	public ModelBasicoResponse InduzirEPredizer(ModelBasicoRequest req) {
-		ModelBasicoResponse res = new ModelBasicoResponse();
+	public ModelResponse InduzirEPredizer(ModelRequest req) {
+		ModelResponse res = new ModelResponse();
 
 		List<Integer> caminho = new ArrayList<Integer>();
 
@@ -66,7 +67,7 @@ public class Processo {
 			nohRetorno = norComDisjuncaoDeTodosOsValoresDaClasseDa(listaDados, classe);
 			return nohRetorno;
 		} else {
-			String prop = selecionaUmaPropriedadeP(props);
+			String prop = selecionaUmaPropriedadeP(props, listaDados);
 			Integer prop_index = props.get(prop);
 
 			nohRetorno.setNomePropNoh(prop);
@@ -88,7 +89,7 @@ public class Processo {
 				List<Map<Integer, String>> particaoVListaDadosCopia = construirParticaoV(prop_index, valorV,
 						listaDados);
 
-				// Para não ser por referÃªncia
+				// Para não ser por referência
 				Map<String, Integer> propsNovo = new HashMap<String, Integer>();
 				propsNovo.putAll(props);
 
@@ -157,16 +158,13 @@ public class Processo {
 		return novoNoh;
 	}
 
-	private String selecionaUmaPropriedadeP(Map<String, Integer> props) {
-		// EH AQUI QUE ENTRA O ENTROPIA!!!!
-		Entropia e = new Entropia(props, null);
+	private String selecionaUmaPropriedadeP(Map<String, Integer> props, List<Map<Integer, String>> listaDados) {
+		Selecao e = new Selecao(props, listaDados);
 		
-		String value = new String();
-		for (String key : props.keySet()) {
-			value = key;
-			break;
-		}
-		return value;
+		String prop = e.elegeOMaior();
+	
+		System.out.println(prop);
+		return prop;
 	}
 
 	private List<Map<Integer, String>> construirParticaoV(Integer prop_index, String valor,
@@ -196,7 +194,7 @@ public class Processo {
 	}
 
 	private List<String> criarListaDeValoresDeUmaProp(List<Map<Integer, String>> listaDados, Integer prop_index) {
-		// Cria a lista de valores com valores distintos (Ãºnicos)
+		// Cria a lista de valores com valores distintos (únicos)
 
 		List<String> listaValores = new ArrayList<String>();
 
@@ -222,7 +220,7 @@ public class Processo {
 
 	}
 
-	public void predizer(NohOuRamo nor, ModelBasicoRequest req, List<Integer> caminho, ModelBasicoResponse res) {
+	public void predizer(NohOuRamo nor, ModelRequest req, List<Integer> caminho, ModelResponse res) {
 
 		percorrerPrimeiroNoh(nor, req, caminho, res);
 //		String[] r2 = r.split("\\|");
@@ -230,7 +228,7 @@ public class Processo {
 //		Collections.reverse(lr);
 	}
 
-	private String decidirFolha(NohOuRamo nor, ModelBasicoRequest aux, List<Integer> caminho, ModelBasicoResponse res) {
+	private String decidirFolha(NohOuRamo nor, ModelRequest aux, List<Integer> caminho, ModelResponse res) {
 		if (nor.getValorClasseFolha() != null) {
 			ListasPadrao listas = new ListasPadrao();
 			listas.setClassePadrao();
@@ -242,7 +240,7 @@ public class Processo {
 		}
 	}
 
-	private String decidirNoh(NohOuRamo nor, ModelBasicoRequest aux, List<Integer> caminho) {
+	private String decidirNoh(NohOuRamo nor, ModelRequest aux, List<Integer> caminho) {
 		if (nor.getNomePropNoh() != null) {
 			caminho.add(nor.getId());
 			return nor.getNomePropNoh();
@@ -251,7 +249,7 @@ public class Processo {
 		}
 	}
 
-	private String decidirValorRamo(NohOuRamo nor, ModelBasicoRequest aux, List<Integer> caminho) {
+	private String decidirValorRamo(NohOuRamo nor, ModelRequest aux, List<Integer> caminho) {
 		if (nor.getValorPropRamo() != null) {
 			return nor.getValorPropRamo();
 		} else {
@@ -259,7 +257,7 @@ public class Processo {
 		}
 	}
 
-	private String decidirValorComparar(String tipo, ModelBasicoRequest aux) {
+	private String decidirValorComparar(String tipo, ModelRequest aux) {
 		switch (tipo) {
 		case "História de Crédito": {
 			return aux.getHistoria();
@@ -277,7 +275,7 @@ public class Processo {
 		return null;
 	}
 
-	private String percorrerCasoFolhaOuNoh(NohOuRamo nor, ModelBasicoRequest aux, List<Integer> caminho, ModelBasicoResponse res) {
+	private String percorrerCasoFolhaOuNoh(NohOuRamo nor, ModelRequest aux, List<Integer> caminho, ModelResponse res) {
 		String nomeFolha = decidirFolha(nor, aux, caminho, res);
 		String nomeNoh = decidirNoh(nor, aux, caminho);
 
@@ -290,8 +288,8 @@ public class Processo {
 		}
 	}
 
-	private String percorrerCasoRamoOuNoh(NohOuRamo norInicial, ModelBasicoRequest aux, String propNome, List<Integer> caminho,
-			ModelBasicoResponse res) {
+	private String percorrerCasoRamoOuNoh(NohOuRamo norInicial, ModelRequest aux, String propNome, List<Integer> caminho,
+			ModelResponse res) {
 		String retorno = null;
 		String valorPropRamoComparar = decidirValorComparar(propNome, aux);
 		NohOuRamo ultimoNor = new NohOuRamo();
@@ -319,7 +317,7 @@ public class Processo {
 		return retorno;
 	}
 
-	private void percorrerPrimeiroNoh(NohOuRamo norInicial, ModelBasicoRequest aux, List<Integer> caminho, ModelBasicoResponse res) {
+	private void percorrerPrimeiroNoh(NohOuRamo norInicial, ModelRequest aux, List<Integer> caminho, ModelResponse res) {
 
 		if (norInicial.getFilhos().isEmpty()) {
 			decidirFolha(norInicial, aux, caminho, res);
