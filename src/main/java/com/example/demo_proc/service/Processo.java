@@ -28,9 +28,12 @@ public class Processo {
 		listas.setClassePadrao();
 		id = 0;
 		int iteracaoAtual = 0;
-
-		return induzirArvore(listas.getListaDados(), listas.getProps(), listas.getClasse(), listas.getClasseFormatado(),
+		
+		NohOuRamo retorno = induzirArvore(listas.getListaDados(), listas.getProps(), listas.getClasse(), listas.getClasseFormatado(),
 				iteracaoAtual);
+
+		System.out.println("Induzido");
+		return retorno;
 	}
 
 	public ModelResponse InduzirEPredizer(ModelRequest req) {
@@ -43,6 +46,8 @@ public class Processo {
 		predizer(res.getNohFinal(), req, caminho, res);
 
 		res.setIdCaminho(caminho);
+
+		System.out.println("Predizido");
 
 		return res;
 	}
@@ -172,7 +177,7 @@ public class Processo {
 		
 		String prop = e.elegeOMaior();
 	
-		System.out.println(prop);
+//		System.out.println(prop);
 		return prop;
 	}
 

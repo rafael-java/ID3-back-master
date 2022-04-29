@@ -85,9 +85,9 @@ public class Selecao {
 			}
 		}
 
-		System.out.println(ganhosDeInformacao);
+//		System.out.println(ganhosDeInformacao);
 		maior.put(prop, maiorGanho);
-		System.out.println(maior);
+//		System.out.println(maior);
 
 		return prop;
 	}
