@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @AllArgsConstructor
-public class ModelBasicoResponse implements Serializable {
+public class ModelResponse implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -19,7 +19,7 @@ public class ModelBasicoResponse implements Serializable {
 	private NohOuRamo nohFinal;
 	private String riscoFinal;
 	
-	public ModelBasicoResponse() {
+	public ModelResponse() {
 		setIdCaminho(new ArrayList<Integer>());
 	}
 

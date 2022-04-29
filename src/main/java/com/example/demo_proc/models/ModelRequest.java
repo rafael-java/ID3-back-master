@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-public class ModelBasicoRequest implements Serializable {
+public class ModelRequest implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	

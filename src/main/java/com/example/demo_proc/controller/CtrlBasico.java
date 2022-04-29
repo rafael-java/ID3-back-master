@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo_proc.models.ModelBasicoRequest;
-import com.example.demo_proc.models.ModelBasicoResponse;
+import com.example.demo_proc.models.ModelRequest;
+import com.example.demo_proc.models.ModelResponse;
 import com.example.demo_proc.models.NohOuRamo;
 import com.example.demo_proc.service.Processo;
 
@@ -31,9 +31,9 @@ public class CtrlBasico {
 
 	@PostMapping(value = "/v1/predizer", produces = { "application/json", "application/xml" }, consumes = {
 			"application/json", "application/xml" })
-	public ResponseEntity<ModelBasicoResponse> metodoInduzirEPredizer(@Valid @RequestBody ModelBasicoRequest req)
+	public ResponseEntity<ModelResponse> metodoInduzirEPredizer(@Valid @RequestBody ModelRequest req)
 			throws Exception {
-		ModelBasicoResponse res = proc.InduzirEPredizer(req);
+		ModelResponse res = proc.InduzirEPredizer(req);
 		return ResponseEntity.ok(res);
 	}
 
