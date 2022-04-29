@@ -46,6 +46,15 @@ public class Processo {
 
 		return res;
 	}
+	
+	private void predizer(NohOuRamo nor, ModelRequest req, List<Integer> caminho, ModelResponse res) {
+
+		Predicao p = new Predicao();
+		p.percorrerPrimeiroNoh(nor, req, caminho, res);
+//		String[] r2 = r.split("\\|");
+//		List<String> lr = Arrays.asList(r2);
+//		Collections.reverse(lr);
+	}
 
 	private NohOuRamo induzirArvore(List<Map<Integer, String>> listaDados, Map<String, Integer> props, String classe,
 			String classeFormatada, int iteracaoAtual) {
@@ -218,112 +227,5 @@ public class Processo {
 		System.out.println(listaValores);
 		return listaValores;
 
-	}
-
-	public void predizer(NohOuRamo nor, ModelRequest req, List<Integer> caminho, ModelResponse res) {
-
-		percorrerPrimeiroNoh(nor, req, caminho, res);
-//		String[] r2 = r.split("\\|");
-//		List<String> lr = Arrays.asList(r2);
-//		Collections.reverse(lr);
-	}
-
-	private String decidirFolha(NohOuRamo nor, ModelRequest aux, List<Integer> caminho, ModelResponse res) {
-		if (nor.getValorClasseFolha() != null) {
-			ListasPadrao listas = new ListasPadrao();
-			listas.setClassePadrao();
-			caminho.add(nor.getId());
-			res.setRiscoFinal(listas.getClasseFormatado() + " " + nor.getValorClasseFolha());
-			return nor.getValorClasseFolha();
-		} else {
-			return null;
-		}
-	}
-
-	private String decidirNoh(NohOuRamo nor, ModelRequest aux, List<Integer> caminho) {
-		if (nor.getNomePropNoh() != null) {
-			caminho.add(nor.getId());
-			return nor.getNomePropNoh();
-		} else {
-			return null;
-		}
-	}
-
-	private String decidirValorRamo(NohOuRamo nor, ModelRequest aux, List<Integer> caminho) {
-		if (nor.getValorPropRamo() != null) {
-			return nor.getValorPropRamo();
-		} else {
-			return null;
-		}
-	}
-
-	private String decidirValorComparar(String tipo, ModelRequest aux) {
-		switch (tipo) {
-		case "História de Crédito": {
-			return aux.getHistoria();
-		}
-		case "Dívida": {
-			return aux.getDivida();
-		}
-		case "Renda": {
-			return aux.getRenda();
-		}
-		case "Garantia": {
-			return aux.getGarantia();
-		}
-		}
-		return null;
-	}
-
-	private String percorrerCasoFolhaOuNoh(NohOuRamo nor, ModelRequest aux, List<Integer> caminho, ModelResponse res) {
-		String nomeFolha = decidirFolha(nor, aux, caminho, res);
-		String nomeNoh = decidirNoh(nor, aux, caminho);
-
-		if (nomeFolha != null) {
-			return nomeFolha;
-		} else if (nomeNoh != null) {
-			return percorrerCasoRamoOuNoh(nor, aux, nomeNoh, caminho, res);
-		} else {
-			return null;
-		}
-	}
-
-	private String percorrerCasoRamoOuNoh(NohOuRamo norInicial, ModelRequest aux, String propNome, List<Integer> caminho,
-			ModelResponse res) {
-		String retorno = null;
-		String valorPropRamoComparar = decidirValorComparar(propNome, aux);
-		NohOuRamo ultimoNor = new NohOuRamo();
-		boolean encontrado = false;
-
-		if (!norInicial.getFilhos().isEmpty()) {
-			for (NohOuRamo norFilho : norInicial.getFilhos()) {
-				String valorRamo = decidirValorRamo(norFilho, aux, caminho);
-
-				if (valorRamo != null && valorRamo.equals(valorPropRamoComparar)) {
-					caminho.add(norFilho.getId());
-					retorno = percorrerCasoFolhaOuNoh(norFilho.getFilhos().get(0), aux, caminho, res);
-					encontrado = true;
-				}
-
-				ultimoNor = norFilho;
-			}
-			if (!encontrado) {
-				retorno = percorrerCasoFolhaOuNoh(ultimoNor, aux, caminho, res);
-			}
-		} else {
-			throw new UnsupportedOperationException("Não é Ramo nem Noh");
-		}
-
-		return retorno;
-	}
-
-	private void percorrerPrimeiroNoh(NohOuRamo norInicial, ModelRequest aux, List<Integer> caminho, ModelResponse res) {
-
-		if (norInicial.getFilhos().isEmpty()) {
-			decidirFolha(norInicial, aux, caminho, res);
-		} else {
-			String nomeNoh = decidirNoh(norInicial, aux, caminho);
-			percorrerCasoRamoOuNoh(norInicial, aux, nomeNoh, caminho, res);
-		}
 	}
 }
