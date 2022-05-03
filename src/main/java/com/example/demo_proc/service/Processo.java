@@ -91,6 +91,7 @@ public class Processo {
 			List<String> listValores = criarListaDeValoresDeUmaProp(listaDados, prop_index);
 			for (String valorV : listValores) {
 
+				// RAMO ROTULADO COM V
 				NohOuRamo ramoV = new NohOuRamo();
 				ramoV.setValorPropRamo(valorV);
 				ramoV.setClasseNome(classe);
@@ -100,6 +101,7 @@ public class Processo {
 				// Adiciona aos filhos
 				nohRetorno.addFilhos(ramoV);
 
+				// PARTICAO V 
 				List<Map<Integer, String>> particaoVListaDadosCopia = construirParticaoV(prop_index, valorV,
 						listaDados);
 
@@ -145,6 +147,8 @@ public class Processo {
 	}
 
 	private NohOuRamo norComDisjuncaoDeTodosOsValoresDaClasseDa(List<Map<Integer, String>> listaDados, String classe) {
+		// OLHAR ISSO AQUI - COLOCAR OU
+		
 		Map<Integer, String> risco_Coluna = listaDados.get(0);
 		List<String> classeValores = new ArrayList<String>();
 		String classeValoresReturned = new String();
@@ -229,7 +233,7 @@ public class Processo {
 //		}
 //	}
 
-		System.out.println(listaValores);
+//		System.out.println(listaValores);
 		return listaValores;
 
 	}
