@@ -56,26 +56,20 @@ public class Processo {
 
 		Predicao p = new Predicao();
 		p.percorrerPrimeiroNoh(nor, req, caminho, res);
-//		String[] r2 = r.split("\\|");
-//		List<String> lr = Arrays.asList(r2);
-//		Collections.reverse(lr);
 	}
 
 	private NohOuRamo induzirArvore(List<Map<Integer, String>> listaDados, Map<String, Integer> props, String classe,
 			String classeFormatada, int iteracaoAtual) {
 		iteracaoAtual++;
 
-		// MOVI // MOVI // MOVI !!
 		NohOuRamo nohRetorno = new NohOuRamo();
 		nohRetorno.setClasseNome(classe);
 		id++;
 		nohRetorno.setId(id);
-		// MOVI // MOVI // MOVI !!
 
 		String classeValor = casoTodosElementosSejamDaMesmaClasse(listaDados);
 		if (!classeValor.isEmpty()) {
-			nohRetorno.setValorClasseFolha(classeFormatada + " " + classeValor); // CORRIGIDO // CORRIGIDO //
-																					// CORRIGIDO!!
+			nohRetorno.setValorClasseFolha(classeFormatada + " " + classeValor); 
 			return nohRetorno;
 		} else if (props.isEmpty()) {
 			nohRetorno = norComDisjuncaoDeTodosOsValoresDaClasseDa(listaDados, classe);
@@ -91,32 +85,29 @@ public class Processo {
 			List<String> listValores = criarListaDeValoresDeUmaProp(listaDados, prop_index);
 			for (String valorV : listValores) {
 
-				// RAMO ROTULADO COM V
-				NohOuRamo ramoV = new NohOuRamo();
-				ramoV.setValorPropRamo(valorV);
-				ramoV.setClasseNome(classe);
+				NohOuRamo ramoRotuladoComV = new NohOuRamo();
+				ramoRotuladoComV.setValorPropRamo(valorV);
+				ramoRotuladoComV.setClasseNome(classe);
 				id++;
-				ramoV.setId(id);
+				ramoRotuladoComV.setId(id);
 
-				// Adiciona aos filhos
-				nohRetorno.addFilhos(ramoV);
+				nohRetorno.addFilhos(ramoRotuladoComV);
 
-				// PARTICAO V 
-				List<Map<Integer, String>> particaoVListaDadosCopia = construirParticaoV(prop_index, valorV,
+				List<Map<Integer, String>> particaoV = construirParticaoV(prop_index, valorV,
 						listaDados);
 
 				// Para não ser por referência
 				Map<String, Integer> propsNovo = new HashMap<String, Integer>();
 				propsNovo.putAll(props);
 
-				NohOuRamo nohFilho = new NohOuRamo(); // MOVI // MOVI // MOVI !!
+				NohOuRamo nohFilho = new NohOuRamo();
 
-				nohFilho = induzirArvore(particaoVListaDadosCopia, propsNovo, classe, classeFormatada, iteracaoAtual);
+				nohFilho = induzirArvore(particaoV, propsNovo, classe, classeFormatada, iteracaoAtual);
 				nohFilho.setClasseNome(classe);
 				id++;
 				nohFilho.setId(id);
 
-				ramoV.addFilhos(nohFilho);
+				ramoRotuladoComV.addFilhos(nohFilho);
 			}
 
 			return nohRetorno;
@@ -135,20 +126,18 @@ public class Processo {
 				valorClasseAnterior = valorClasse;
 				i++;
 			}
-			// se mais de um for diferente
+			// Se mais de um for diferente
 			if (i > 1) {
 				return "";
 			}
 		}
 
-		// se todos forem iguais
+		// Se todos forem iguais
 		return valorClasseAnterior;
 
 	}
 
 	private NohOuRamo norComDisjuncaoDeTodosOsValoresDaClasseDa(List<Map<Integer, String>> listaDados, String classe) {
-		// OLHAR ISSO AQUI - COLOCAR OU
-		
 		Map<Integer, String> risco_Coluna = listaDados.get(0);
 		List<String> classeValores = new ArrayList<String>();
 		String classeValoresReturned = new String();
@@ -157,21 +146,13 @@ public class Processo {
 		for (String string : risco_Coluna.values()) {
 			valueAnterior = string;
 			if (!classeValores.contains(valueAnterior)) {
-				classeValoresReturned = classeValoresReturned.concat(valueAnterior + ", ");
+				classeValoresReturned = classeValoresReturned.concat(valueAnterior + " ou ");
 				classeValores.add(valueAnterior);
 			}
 		}
 
-//		for (Integer key : risco_Coluna.keySet()) {
-//			String value = risco_Coluna.get(key);
-//			if (!classeValores.contains(value)) {
-//				classeValoresReturned = classeValoresReturned.concat(value + ",");
-//				classeValores.add(value);
-//			}
-//		}
-
 		NohOuRamo novoNoh = new NohOuRamo();
-		classeValoresReturned = classeValoresReturned.substring(0, classeValoresReturned.length() - 2);
+		classeValoresReturned = classeValoresReturned.substring(0, classeValoresReturned.length() - 4);
 		novoNoh.setValorClasseFolha(classeValoresReturned + " " + classe);
 		return novoNoh;
 	}
@@ -181,7 +162,6 @@ public class Processo {
 		
 		String prop = e.elegeOMaior();
 	
-//		System.out.println(prop);
 		return prop;
 	}
 
@@ -226,14 +206,6 @@ public class Processo {
 			}
 		}
 
-//		for (Integer valor : prop_Coluna.keySet()) {
-//		String value = prop_Coluna.get(valor);
-//		if (!listaValores.contains(value)) {
-//			listaValores.add(value);
-//		}
-//	}
-
-//		System.out.println(listaValores);
 		return listaValores;
 
 	}

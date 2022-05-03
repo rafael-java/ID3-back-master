@@ -419,14 +419,18 @@ public class Selecao {
 		return dadosCE.get(ENTROPIA_DA_TABELA) - somaPonderado;
 	}
 
-//	public String selecionaPropriedade() {
+	// TESTES
+	
+	public String selecionaPropriedade() {
 //		String value = new String();
 //		for (String key : props.keySet()) {
 //			value = key;
 //			break;
 //		}
 //		return value;
-//	}
+		return null;
+	}
+	
 	public void teste_print() {
 
 		System.out.println(listaDados.get(0));
