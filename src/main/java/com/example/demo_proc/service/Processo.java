@@ -60,6 +60,7 @@ public class Processo {
 
 	private NohOuRamo induzirArvore(List<Map<Integer, String>> listaDados, Map<String, Integer> props, String classe,
 			String classeFormatada, int iteracaoAtual) {
+		
 		iteracaoAtual++;
 
 		NohOuRamo nohRetorno = new NohOuRamo();
@@ -178,17 +179,17 @@ public class Processo {
 			}
 		}
 
-		List<Map<Integer, String>> particaoVListaDadosCopia = new ArrayList<Map<Integer, String>>();
+		List<Map<Integer, String>> particaoV = new ArrayList<Map<Integer, String>>();
 
 		for (Map<Integer, String> coluna1 : listaDados) {
 			Map<Integer, String> novaColuna = new HashMap<Integer, String>();
 			for (Integer indice : indices) {
 				novaColuna.put(indice, coluna1.get(indice));
 			}
-			particaoVListaDadosCopia.add(novaColuna);
+			particaoV.add(novaColuna);
 		}
 
-		return particaoVListaDadosCopia;
+		return particaoV;
 	}
 
 	private List<String> criarListaDeValoresDeUmaProp(List<Map<Integer, String>> listaDados, Integer prop_index) {

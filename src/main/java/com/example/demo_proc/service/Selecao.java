@@ -106,7 +106,7 @@ public class Selecao {
 			List<Map<String, String>> contagemDetalhada = contagemDetalhada(totalValoresProps, coluna, indice);
 			List<List<Map<String, Double>>> countProps = countProps(contagemDetalhada);
 
-			if (checkSeTudoOk(countProps)) {
+			if (checkSeTudoOkComTotais(countProps)) {
 
 				adicionaFrequenciaAPartirDoTotal(countProps);
 
@@ -286,7 +286,7 @@ public class Selecao {
 		return retorno;
 	}
 
-	private Boolean checkSeTudoOk(List<List<Map<String, Double>>> countProps) throws UnsupportedOperationException {
+	private Boolean checkSeTudoOkComTotais(List<List<Map<String, Double>>> countProps) throws UnsupportedOperationException {
 
 		List<Map<String, Double>> todasFreq = countProps.get(0);
 		Double total = 0D;
