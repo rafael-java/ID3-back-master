@@ -2,6 +2,7 @@ package com.example.demo_proc.service;
 
 import java.util.List;
 
+import com.example.demo_proc.error_exception.InternalServerErrorException;
 import com.example.demo_proc.models.ListasPadrao;
 import com.example.demo_proc.models.ModelRequest;
 import com.example.demo_proc.models.ModelResponse;
@@ -55,7 +56,7 @@ public class Predicao {
 				retorno = percorrerCasoFolhaOuNoh(ultimoNor, aux, caminho, res);
 			}
 		} else {
-			throw new UnsupportedOperationException("Não é Ramo nem Noh");
+			throw new InternalServerErrorException("Não é Ramo nem Noh, provavelmente nunca vai acontecer de entrar aqui");
 		}
 
 		return retorno;

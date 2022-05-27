@@ -1,5 +1,0 @@
-//- Testar apresentação em 15 minutos (SEGUNDA 18:00)
-
-// Tirar os comments
-
-//- (se der) testar com os valores que ele passou (da tabela) 

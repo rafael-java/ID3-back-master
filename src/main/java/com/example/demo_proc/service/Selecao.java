@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.example.demo_proc.error_exception.InternalServerErrorException;
+
 public class Selecao {
 
 	private List<Map<Integer, String>> listaDados;
@@ -212,13 +214,13 @@ public class Selecao {
 
 	private List<Map<String, String>> contagemDetalhada(Map<String, Double> countValores, Map<Integer, String> coluna,
 			Integer indice) {
-		
+
 		List<Integer> indices = new ArrayList<Integer>();
-		
+
 		for (Integer indic : coluna.keySet()) {
 			indices.add(indic);
 		}
-		
+
 		List<Map<String, String>> subConjunto = new ArrayList<Map<String, String>>();
 		for (String valor : countValores.keySet()) {
 			Integer count = 0;
@@ -286,7 +288,7 @@ public class Selecao {
 		return retorno;
 	}
 
-	private Boolean checkSeTudoOkComTotais(List<List<Map<String, Double>>> countProps) throws UnsupportedOperationException {
+	private Boolean checkSeTudoOkComTotais(List<List<Map<String, Double>>> countProps) {
 
 		List<Map<String, Double>> todasFreq = countProps.get(0);
 		Double total = 0D;
@@ -295,14 +297,14 @@ public class Selecao {
 			if (map.containsKey(TOTAL)) {
 				total = total + map.get(TOTAL);
 			} else {
-				throw new UnsupportedOperationException("Um dos maps não tem total");
+				throw new InternalServerErrorException("Um dos maps não tem total");
 			}
 		}
 
 		if (total.doubleValue() == dadosCE.get(TAMANHO_DA_TABELA)) {
 			return true;
 		} else {
-			throw new UnsupportedOperationException("Total não é igual ao tabela");
+			throw new InternalServerErrorException("Total não é igual ao tabela");
 		}
 	}
 
@@ -323,8 +325,7 @@ public class Selecao {
 		}
 	}
 
-	private List<Map<String, Double>> pValoresProp(List<List<Map<String, Double>>> countProps)
-			throws IllegalArgumentException {
+	private List<Map<String, Double>> pValoresProp(List<List<Map<String, Double>>> countProps) {
 
 		List<Map<String, Double>> gabarito = countProps.get(1);
 		List<Map<String, Double>> todasFreqs = new ArrayList<Map<String, Double>>();
@@ -334,7 +335,7 @@ public class Selecao {
 			Set<String> propSet = gabarito.get(index).keySet();
 			String prop = "";
 			if (propSet.size() > 1) {
-				throw new IllegalArgumentException("Gabarito tem algum map com mais de uma entrada");
+				throw new InternalServerErrorException("Gabarito tem algum map com mais de uma entrada");
 			}
 			for (String string : propSet) {
 				prop = string;
@@ -361,7 +362,7 @@ public class Selecao {
 		return todasFreqs;
 	}
 
-	private Map<String, Double> entropiaESomaValoresProps(List<Map<String, Double>> pProps) throws IllegalArgumentException {
+	private Map<String, Double> entropiaESomaValoresProps(List<Map<String, Double>> pProps) {
 
 		Map<String, Double> entropias = new HashMap<String, Double>();
 
@@ -420,7 +421,7 @@ public class Selecao {
 	}
 
 	// TESTES
-	
+
 	public String selecionaPropriedade() {
 //		String value = new String();
 //		for (String key : props.keySet()) {
@@ -430,7 +431,7 @@ public class Selecao {
 //		return value;
 		return null;
 	}
-	
+
 	public void teste_print() {
 
 		System.out.println(listaDados.get(0));
@@ -450,4 +451,3 @@ public class Selecao {
 		System.out.println(elegeOMaior());
 	}
 }
-

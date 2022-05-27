@@ -24,15 +24,14 @@ public class CtrlBasico {
 	private Processo proc;
 
 	@GetMapping(value = "/v1/induzir", produces = { "application/json", "application/xml" })
-	public ResponseEntity<NohOuRamo> metodoInduzir() throws Exception {
+	public ResponseEntity<NohOuRamo> metodoInduzir() {
 		NohOuRamo res = proc.induzirArvore();
 		return ResponseEntity.ok(res);
 	}
 
 	@PostMapping(value = "/v1/predizer", produces = { "application/json", "application/xml" }, consumes = {
 			"application/json", "application/xml" })
-	public ResponseEntity<ModelResponse> metodoInduzirEPredizer(@Valid @RequestBody ModelRequest req)
-			throws Exception {
+	public ResponseEntity<ModelResponse> metodoInduzirEPredizer(@Valid @RequestBody ModelRequest req) {
 		ModelResponse res = proc.InduzirEPredizer(req);
 		return ResponseEntity.ok(res);
 	}
